@@ -5,7 +5,7 @@
 	"stream-distance": 500.0,
 	"announce": false,
 	"csharp": "disabled",
-	"port": 22006,
+	"port": 12345,
 	"encryption": false,
 	"url": "https://v.b-zone.ro",
 	"language": "en",

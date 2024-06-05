@@ -15,3 +15,10 @@ mp.events.add('playerReady', (player) => {
 });
 
 console.log(SHARED_CONSTANTS.HELLO_WORLD);
+
+function checkChatMessage(player: any, text: string) {
+	console.log(`${player.name}: ${text}`);
+	mp.players.broadcast(`${player.name}: ${text}`);
+};
+
+mp.events.add("playerChat", checkChatMessage);

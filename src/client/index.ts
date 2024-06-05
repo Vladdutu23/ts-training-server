@@ -1,4 +1,5 @@
 import { SHARED_CONSTANTS } from '@shared/constants';
+import { chatModule } from './chat';
 
 mp.events.add('playerReady', () => {
 	mp.console.logInfo(`${mp.players.local.name} is ready!`);
@@ -12,4 +13,12 @@ mp.events.add('playerReady', () => {
 	};
 
 	mp.players.local.customMethod();
+
+	initializeClient();
 });
+
+function initializeClient(): void {
+	chatModule.init();
+
+	mp.gui.chat.push(`Client initialized.`);
+}

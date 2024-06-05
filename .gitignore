@@ -80,7 +80,16 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+dist/bin
+dist/client_packages/index.js
+dist/client_packages/.listcache
+dist/maps
+dist/packages
+dist/plugins
+dist/conf.json
+dist/package.json
+dist/ragemp-server.exe
+dist/BugTrap-x64.dll
 
 # Gatsby files
 .cache/

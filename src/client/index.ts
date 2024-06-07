@@ -1,5 +1,6 @@
 import { SHARED_CONSTANTS } from '@shared/constants';
 import { chatModule } from './chat';
+import { weaponsUtils } from './weapons';
 
 mp.events.add('playerReady', () => {
 	mp.console.logInfo(`${mp.players.local.name} is ready!`);
@@ -19,6 +20,7 @@ mp.events.add('playerReady', () => {
 
 function initializeClient(): void {
 	chatModule.init();
+	weaponsUtils.init();
 
 	mp.gui.chat.push(`Client initialized.`);
 }
@@ -107,7 +109,6 @@ function startNoClip() {
 	localPlayer.freezePosition(true);
 	localPlayer.setInvincible(true);
 }
-
 function stopNoClip() {
 	if (noClipCamera) {
 		localPlayer.position = noClipCamera.getCoord();

@@ -1,3 +1,5 @@
+import { Weapons } from "@shared/constants";
+
 class Commands {
     init(): void {
         return;
@@ -23,7 +25,7 @@ class Commands {
         } else if (typeof usernameOrId === 'string') {
             var target: null | PlayerMp = null;
             mp.players.forEach((p) => {
-                if (target == null && p.name.includes(usernameOrId)) {
+                if (target == null && p.name.toLowerCase().includes(usernameOrId.toLowerCase())) {
                     // console.log(`player: ${JSON.stringify(p)}`);
                     target = p;
                 }
@@ -60,8 +62,8 @@ class Commands {
     }
 
     getGun(player: PlayerMp, weapon: string, ammo: number): void {
-        var weaponHash = mp.joaat(weapon);
-        player.giveWeapon(weaponHash, ammo);
+        const weaponValue = Weapons[weapon.toUpperCase() as keyof typeof Weapons];
+        player.giveWeapon(weaponValue, ammo);
         mp.players.broadcast(`(/gg) ${player.name} Get ${weapon} with ${ammo} ammo.`);
     }
 

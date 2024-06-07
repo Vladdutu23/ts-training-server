@@ -1,6 +1,7 @@
 import { SHARED_CONSTANTS } from '@shared/constants';
 import { chatModule } from './chat';
 import { weaponsUtils } from './weapons';
+import { globalRender } from './render';
 
 mp.events.add('playerReady', () => {
 	mp.console.logInfo(`${mp.players.local.name} is ready!`);
@@ -21,8 +22,13 @@ mp.events.add('playerReady', () => {
 function initializeClient(): void {
 	chatModule.init();
 	weaponsUtils.init();
+	globalRender.init();
 
 	mp.gui.chat.push(`Client initialized.`);
+	mp.gui.chat.push(`_______________________`);
+	mp.gui.chat.push(`Welcome to Training B-Zone V. Use /help for commands.`);
+	mp.gui.chat.push(`Don't forget to change the PORT (from 12345 to 22005) before you connect to the OFFICIAL Server!`);
+	mp.gui.chat.push(`_______________________`);
 }
 
 function drawHud(): void {

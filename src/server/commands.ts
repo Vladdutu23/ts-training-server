@@ -14,6 +14,7 @@ class Commands {
         MAKEFULL: 'mf',
         GETGUN: 'gg',
         REVIVE: 'revive',
+        VEH: 'veh',
     }
 
     findPlayer(usernameOrId: string): PlayerMp | null {
@@ -77,12 +78,32 @@ class Commands {
         mp.players.broadcast(`(/revive) ${player.name} Revive ${target.name}.`);
     }
 
+    spawnVehicle(player: PlayerMp, name: string): void {
+        const vehName = mp.joaat(name);
+        if (!vehName) {
+            player.outputChatBox(`Vehicle not found!`);
+            return;
+        }
+        const veh = mp.vehicles.new(vehName, player.position,
+            {
+                engine: true,
+                color: [
+                    [Math.floor(Math.random() * 255) + 1, Math.floor(Math.random() * 255) + 1, Math.floor(Math.random() * 255) + 1],
+                    [Math.floor(Math.random() * 255) + 1, Math.floor(Math.random() * 255) + 1, Math.floor(Math.random() * 255) + 1]
+                ]
+            });
+        veh.numberPlate = 'TR-BZONE';
+        player.putIntoVehicle(veh, 0);
+        mp.players.broadcast(`(/veh) ${player.name} Spawned a ${name}.`);
+    }
+
     events = [
         // Help
         mp.events.addCommand(this.commandsList.HELP, (player, _fullText) => {
             player.outputChatBox(`Teleport Commands: /goto, /gethere, F2 - No Clip`);
             player.outputChatBox(`Health & Armor Commands: /sethp, /setarmor, /mf, /revive`);
             player.outputChatBox(`Weapon Commands: /gg`);
+            player.outputChatBox(`Vehicle Commands: /veh`);
         }),
 
         // Teleport
@@ -165,9 +186,18 @@ class Commands {
             }
             this.revive(player, target);
         }),
+        
+        // Vehhicles
+        mp.events.addCommand(this.commandsList.VEH, (player, _fullText, vehicleName) => {
+            if (!vehicleName) {
+                player.outputChatBox(`Usage: [/veh <Vehicle Name>]`);
+                return;
+            }
+            this.spawnVehicle(player, vehicleName);
+        }),
 
         mp.events.add("playerCommand", (player, command) => {
-            player.outputChatBox(`${command} is not a valid command.`);
+            player.outputChatBox(`${command} is not a valid command. Use /help for a list of commands.`);
         }),
     ];
 

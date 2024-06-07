@@ -1,6 +1,10 @@
+import { chat } from './chat';
+import { commands } from './commands';
 import './setup';
 
 import { SHARED_CONSTANTS } from '@shared/constants';
+
+initServer();
 
 mp.events.add('playerReady', (player) => {
 	console.log(`${player.name} is ready!`);
@@ -16,9 +20,7 @@ mp.events.add('playerReady', (player) => {
 
 console.log(SHARED_CONSTANTS.HELLO_WORLD);
 
-function checkChatMessage(player: any, text: string) {
-	console.log(`${player.name}: ${text}`);
-	mp.players.broadcast(`${player.name}: ${text}`);
-};
-
-mp.events.add("playerChat", checkChatMessage);
+function initServer() {
+	commands.init();
+	chat.init();
+}

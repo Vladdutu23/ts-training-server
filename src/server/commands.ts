@@ -1,4 +1,4 @@
-import { getWeaponHashByName } from "@shared/constants";
+import { getVehicleHashByName, getWeaponHashByName } from "@shared/constants";
 
 class Commands {
     init(): void {
@@ -83,12 +83,12 @@ class Commands {
     }
 
     spawnVehicle(player: PlayerMp, name: string): void {
-        const vehName = mp.joaat(name);
-        if (!vehName) {
+        const vehicleHash = getVehicleHashByName(name);
+        if (vehicleHash === undefined) {
             player.outputChatBox(`Vehicle not found!`);
             return;
         }
-        const veh = mp.vehicles.new(vehName, player.position,
+        const veh = mp.vehicles.new(parseInt(vehicleHash), player.position,
             {
                 engine: true,
                 color: [

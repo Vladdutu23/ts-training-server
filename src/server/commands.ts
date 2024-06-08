@@ -1,4 +1,4 @@
-import { Weapons } from "@shared/constants";
+import { getWeaponHashByName } from "@shared/constants";
 
 class Commands {
     init(): void {
@@ -63,8 +63,12 @@ class Commands {
     }
 
     getGun(player: PlayerMp, weapon: string, ammo: number): void {
-        const weaponValue = Weapons[weapon.toUpperCase() as keyof typeof Weapons];
-        player.giveWeapon(weaponValue, ammo);
+        const weaponHash = getWeaponHashByName(weapon);
+        if (weaponHash === undefined) {
+            player.outputChatBox(`Weapon ${weapon} not found!`);
+            return;
+        }
+        player.giveWeapon(parseInt(weaponHash), ammo);
         mp.players.broadcast(`(/gg) ${player.name} Get ${weapon} with ${ammo} ammo.`);
     }
 

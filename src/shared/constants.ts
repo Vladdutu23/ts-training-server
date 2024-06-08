@@ -1276,3 +1276,19 @@ export const vehicleNameToHash: EnumDictionary<string, string> = {
 export function getVehicleHashByName(vehicleName: string): string | undefined {
     return vehicleNameToHash[vehicleName];
 }
+
+// Clothes
+export enum ClothesComponents {
+    HEAD,
+    MASK,
+    HAIRSTYLE,
+    TORSO,
+    LEGS,
+    BAG,
+    SHOES,
+    ACCESSORIES,
+    UNDERSHIRT,
+    ARMOUR,
+    DECAL,
+    TOP
+};

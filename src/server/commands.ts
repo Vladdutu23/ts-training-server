@@ -1,4 +1,5 @@
-import { getVehicleHashByName, getWeaponHashByName } from "@shared/constants";
+import { ClothesComponents, getVehicleHashByName, getWeaponHashByName } from "@shared/constants";
+import { clothes } from "./clothes";
 
 class Commands {
     init(): void {
@@ -15,6 +16,16 @@ class Commands {
         GETGUN: 'gg',
         REVIVE: 'revive',
         VEH: 'veh',
+        FEMALE: 'female',
+        MALE: 'male',
+        TOP: 'top',
+        UNDERSHIRT: 'undershirt',
+        TORSO: 'torso',
+        LEGS: 'legs',
+        SHOES: 'shoes',
+        BAG: 'bag',
+        MASK: 'mask',
+        HAIRSTYLE: 'hairstyle',
     }
 
     findPlayer(usernameOrId: string): PlayerMp | null {
@@ -108,6 +119,7 @@ class Commands {
             player.outputChatBox(`Health & Armor Commands: /sethp, /setarmor, /mf, /revive`);
             player.outputChatBox(`Weapon Commands: /gg`);
             player.outputChatBox(`Vehicle Commands: /veh`);
+            player.outputChatBox(`Clothes Commands: /male, /female, /top, /undershirt, /torso, /legs, /shoes, /bag, /mask, /hairstyle`);
         }),
 
         // Teleport
@@ -198,6 +210,83 @@ class Commands {
                 return;
             }
             this.spawnVehicle(player, vehicleName);
+        }),
+
+        // Clothes
+        mp.events.addCommand(this.commandsList.MALE, (player, _fullText) => {
+            player.model = mp.joaat('mp_m_freemode_01');
+            clothes.removeClothes(player);
+            player.outputChatBox(`You are now ${player.model}.`); 
+        }),
+
+        mp.events.addCommand(this.commandsList.FEMALE, (player, _fullText) => {
+            player.model = mp.joaat('mp_f_freemode_01');
+            clothes.removeClothes(player);
+            player.outputChatBox(`You are now ${player.model}.`); 
+        }),
+
+        mp.events.addCommand(this.commandsList.TOP, (player, _fullText, drawable, texture) => {
+            if (!drawable || !texture) {
+                player.outputChatBox(`Usage: [/top <Drawable Id> <Texture Id>]`);
+                return;
+            }
+            player.setClothes(ClothesComponents.TOP, parseInt(drawable), parseInt(texture), 2);
+        }),
+
+        mp.events.addCommand(this.commandsList.UNDERSHIRT, (player, _fullText, drawable, texture) => {
+            if (!drawable || !texture) {
+                player.outputChatBox(`Usage: [/undershirt <Drawable Id> <Texture Id>]`);
+                return;
+            }
+            player.setClothes(ClothesComponents.UNDERSHIRT, parseInt(drawable), parseInt(texture), 2);
+        }),
+
+        mp.events.addCommand(this.commandsList.TORSO, (player, _fullText, drawable, texture) => {
+            if (!drawable || !texture) {
+                player.outputChatBox(`Usage: [/torso <Drawable Id> <Texture Id>]`);
+                return;
+            }
+            player.setClothes(ClothesComponents.TORSO, parseInt(drawable), parseInt(texture), 2);
+        }),
+
+        mp.events.addCommand(this.commandsList.LEGS, (player, _fullText, drawable, texture) => {
+            if (!drawable || !texture) {
+                player.outputChatBox(`Usage: [/legs <Drawable Id> <Texture Id>]`);
+                return;
+            }
+            player.setClothes(ClothesComponents.LEGS, parseInt(drawable), parseInt(texture), 2);
+        }),
+
+        mp.events.addCommand(this.commandsList.SHOES, (player, _fullText, drawable, texture) => {
+            if (!drawable || !texture) {
+                player.outputChatBox(`Usage: [/shoes <Drawable Id> <Texture Id>]`);
+                return;
+            }
+            player.setClothes(ClothesComponents.SHOES, parseInt(drawable), parseInt(texture), 2);
+        }),
+
+        mp.events.addCommand(this.commandsList.BAG, (player, _fullText, drawable, texture) => {
+            if (!drawable || !texture) {
+                player.outputChatBox(`Usage: [/bag <Drawable Id> <Texture Id>]`);
+                return;
+            }
+            player.setClothes(ClothesComponents.BAG, parseInt(drawable), parseInt(texture), 2);
+        }),
+        
+        mp.events.addCommand(this.commandsList.MASK, (player, _fullText, drawable, texture) => {
+            if (!drawable || !texture) {
+                player.outputChatBox(`Usage: [/mask <Drawable Id> <Texture Id>]`);
+                return;
+            }
+            player.setClothes(ClothesComponents.MASK, parseInt(drawable), parseInt(texture), 2);
+        }),
+
+        mp.events.addCommand(this.commandsList.HAIRSTYLE, (player, _fullText, drawable, texture) => {
+            if (!drawable || !texture) {
+                player.outputChatBox(`Usage: [/hairstyle <Drawable Id> <Texture Id>]`);
+                return;
+            }
+            player.setClothes(ClothesComponents.HAIRSTYLE, parseInt(drawable), parseInt(texture), 2);
         }),
 
         mp.events.add("playerCommand", (player, command) => {

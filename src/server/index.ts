@@ -1,4 +1,5 @@
 import { chat } from './chat';
+import { clothes } from './clothes';
 import { commands } from './commands';
 import './setup';
 
@@ -16,6 +17,8 @@ mp.events.add('playerReady', (player) => {
 	};
 
 	player.customMethod();
+
+	clothes.removeClothes(player);
 });
 
 console.log(SHARED_CONSTANTS.HELLO_WORLD);
@@ -23,4 +26,5 @@ console.log(SHARED_CONSTANTS.HELLO_WORLD);
 function initServer() {
 	commands.init();
 	chat.init();
+	clothes.init();
 }

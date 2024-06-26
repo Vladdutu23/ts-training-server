@@ -2,6 +2,7 @@ import { SHARED_CONSTANTS } from '@shared/constants';
 import { chatModule } from './chat';
 import { weaponsUtils } from './weapons';
 import { globalRender } from './render';
+import { teleporter } from './teleporter';
 
 mp.events.add('playerReady', () => {
 	mp.console.logInfo(`${mp.players.local.name} is ready!`);
@@ -23,6 +24,7 @@ function initializeClient(): void {
 	chatModule.init();
 	weaponsUtils.init();
 	globalRender.init();
+	teleporter.init();
 
 	mp.gui.chat.push(`Client initialized.`);
 	mp.gui.chat.push(`_______________________`);

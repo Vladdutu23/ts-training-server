@@ -6,9 +6,29 @@ class Commands {
         return;
     }
 
+    weatherConditions: { [key: number]: string } = {
+        0: 'EXTRASUNNY',
+        1: 'CLEAR',
+        2: 'CLOUDS',
+        3: 'SMOG',
+        4: 'FOGGY',
+        5: 'OVERCAST',
+        6: 'RAIN',
+        7: 'THUNDER',
+        8: 'CLEARING',
+        9: 'NEUTRAL',
+        10: 'SNOW',
+        11: 'BLIZZARD',
+        12: 'SNOWLIGHT',
+        13: 'XMAS',
+        14: 'HALLOWEEN'
+    };
+
     commandsList = {
         HELP: 'help',
         GOTO: 'goto',
+        GOTOXYZ: 'gotoxyz',
+        GOTOWAYPOINT: 'gotowp',
         GETHERE: 'gethere',
         SETHP: 'sethp',
         SETARMOR: 'setarmor',
@@ -26,6 +46,8 @@ class Commands {
         BAG: 'bag',
         MASK: 'mask',
         HAIRSTYLE: 'hairstyle',
+        SETTIME: 'settime',
+        SETWEATHER: 'setweather',
     }
 
     findPlayer(usernameOrId: string): PlayerMp | null {
@@ -50,6 +72,16 @@ class Commands {
     goto(player: PlayerMp, target: PlayerMp): void {
         player.position = target.position;
         mp.players.broadcast(`(/goto) ${player.name} Goes to ${target.name}.`);
+    }
+
+    gotoXYZ(player: PlayerMp, x: number, y: number, z: number): void {
+        player.position = new mp.Vector3(x, y, z);
+        mp.players.broadcast(`(/goto) ${player.name} Goes to ${x} ${y} ${z}.`);
+    }
+
+    gotoWaypoinnt(player: PlayerMp): void {
+        player.call('teleporter::goto-waypoint');
+        mp.players.broadcast(`(/goto) ${player.name} Goes to his Waypoint.`);
     }
     
     gethere(player: PlayerMp, target: PlayerMp): void {
@@ -112,11 +144,27 @@ class Commands {
         mp.players.broadcast(`(/veh) ${player.name} Spawned a ${name}.`);
     }
 
+    setTime(player: PlayerMp, time: number): void {
+        mp.world.time.hour = time;
+        mp.players.broadcast(`(/settime) ${player.name} Sets Time to ${time}.`);
+    }
+    
+    setWeather(player: PlayerMp, weather: number): void {
+        const weatherString = this.weatherConditions[weather] || 'UNKNOWN';
+        if (weatherString === 'UNKNOWN') {
+            player.outputChatBox(`Weather ${weather} not found!`);
+            return;
+        }
+        mp.world.weather = weatherString;
+        mp.players.broadcast(`(/setweather) ${player.name} Sets Weather to ${weather}.`);
+    }
+
     events = [
         // Help
         mp.events.addCommand(this.commandsList.HELP, (player, _fullText) => {
-            player.outputChatBox(`Teleport Commands: /goto, /gethere, F2 - No Clip`);
+            player.outputChatBox(`Teleport Commands: /goto, /gethere, /gotoxyz, /gotowp F2 - No Clip`);
             player.outputChatBox(`Health & Armor Commands: /sethp, /setarmor, /mf, /revive`);
+            player.outputChatBox(`Weather Commands: /settime, /setweather`);
             player.outputChatBox(`Weapon Commands: /gg`);
             player.outputChatBox(`Vehicle Commands: /veh`);
             player.outputChatBox(`Clothes Commands: /male, /female, /top, /undershirt, /torso, /legs, /shoes, /bag, /mask, /hairstyle`);
@@ -147,6 +195,18 @@ class Commands {
                 return;
             }
             this.gethere(player, target);
+        }),
+
+        mp.events.addCommand(this.commandsList.GOTOXYZ, (player, _fullText, x, y, z) => {
+            if (!x || !y || !z) {
+                player.outputChatBox(`Usage: [/gotoxyz <X> <Y> <Z>]`);
+                return;
+            }
+            this.gotoXYZ(player, parseFloat(x), parseFloat(y), parseFloat(z));
+        }),
+
+        mp.events.addCommand(this.commandsList.GOTOWAYPOINT, (player, _fullText) => {
+            this.gotoWaypoinnt(player);
         }),
 
         // Health & Armor
@@ -287,6 +347,23 @@ class Commands {
                 return;
             }
             player.setClothes(ClothesComponents.HAIRSTYLE, parseInt(drawable), parseInt(texture), 2);
+        }),
+
+        // Weather
+        mp.events.addCommand(this.commandsList.SETTIME, (player, _fullText, time) => {
+            if (!time) {
+                player.outputChatBox(`Usage: [/settime <Time (0-24)>]`);
+                return;
+            }
+            this.setTime(player, parseInt(time));
+        }),
+
+        mp.events.addCommand(this.commandsList.SETWEATHER, (player, _fullText, weather) => {
+            if (!weather) {
+                player.outputChatBox(`Usage: [/settime <Weather (0-14)>]`);
+                return;
+            }
+            this.setWeather(player, parseInt(weather));
         }),
 
         mp.events.add("playerCommand", (player, command) => {

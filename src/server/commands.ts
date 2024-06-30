@@ -48,6 +48,7 @@ class Commands {
         HAIRSTYLE: 'hairstyle',
         SETTIME: 'settime',
         SETWEATHER: 'setweather',
+        DESPAWN_VEHICLE: 'dv',
     }
 
     findPlayer(usernameOrId: string): PlayerMp | null {
@@ -144,6 +145,16 @@ class Commands {
         mp.players.broadcast(`(/veh) ${player.name} Spawned a ${name}.`);
     }
 
+    despawnVehicle(player: PlayerMp, vehicleId: number): void {
+        const vehicle = mp.vehicles.at(vehicleId);
+        if (!vehicle) {
+            player.outputChatBox(`Vehicle not found!`);
+            return;
+        }
+        vehicle.destroy();
+        mp.players.broadcast(`(/dv) ${player.name} Despawned a Vehicle.`);
+    }
+
     setTime(player: PlayerMp, time: number): void {
         mp.world.time.hour = time;
         mp.players.broadcast(`(/settime) ${player.name} Sets Time to ${time}.`);
@@ -166,7 +177,7 @@ class Commands {
             player.outputChatBox(`Health & Armor Commands: /sethp, /setarmor, /mf, /revive`);
             player.outputChatBox(`Weather Commands: /settime, /setweather`);
             player.outputChatBox(`Weapon Commands: /gg`);
-            player.outputChatBox(`Vehicle Commands: /veh`);
+            player.outputChatBox(`Vehicle Commands: /veh, /dv`);
             player.outputChatBox(`Clothes Commands: /male, /female, /top, /undershirt, /torso, /legs, /shoes, /bag, /mask, /hairstyle`);
         }),
 
@@ -263,13 +274,21 @@ class Commands {
             this.revive(player, target);
         }),
         
-        // Vehhicles
+        // Vehicles
         mp.events.addCommand(this.commandsList.VEH, (player, _fullText, vehicleName) => {
             if (!vehicleName) {
                 player.outputChatBox(`Usage: [/veh <Vehicle Name>]`);
                 return;
             }
             this.spawnVehicle(player, vehicleName);
+        }),
+
+        mp.events.addCommand(this.commandsList.DESPAWN_VEHICLE, (player, _fullText, vehicleId) => {
+            if (!vehicleId) {
+                player.outputChatBox(`Usage: [/dv <Vehicle Id>]`);
+                return;
+            }
+            this.despawnVehicle(player, parseInt(vehicleId));
         }),
 
         // Clothes

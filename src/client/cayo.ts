@@ -325,14 +325,29 @@ export const islandData = {
 };
 
 class CayoUtils {
+    islandPosition = new mp.Vector3(4840.571, -5174.425, 2.0);
+    isInCayo = false;
+
     init(): void {
-        this.initializeCayo();
+        mp.gui.chat.push("Cayo Perico initialized.");
+        setInterval(() => {
+            const player = mp.players.local;
+            const dist = mp.game.system.vdist(
+                player.position.x, 
+                player.position.y, 
+                player.position.z, 
+                this.islandPosition.x,
+                this.islandPosition.y, 
+                this.islandPosition.z);
+            if (dist > 1750) this.unloadCayo();
+            else this.initializeCayo();
+        }, 5000);
         return;
     }
 
-    islandPosition = new mp.Vector3(4840.571, -5174.425, 2.0);
-
     initializeCayo() {
+        if (this.isInCayo) return;
+        this.isInCayo = true;
         mp.game.invoke(cayoPericoNative.SET_TOGGLE_MINIMAP_HEIST_ISLAND, true);
 
         for (let i = 0; i < islandData.ipls.length; i++) 
@@ -340,7 +355,15 @@ class CayoUtils {
         const interior = mp.game.interior.getInteriorAtCoords(this.islandPosition.x, this.islandPosition.y, this.islandPosition.z);
         mp.game.interior.refreshInterior(interior);
 
-        mp.gui.chat.push("Cayo Perico initialized.");
+        mp.gui.chat.push("Cayo Perico loaded.");
+    }
+
+    unloadCayo() {
+        if (!this.isInCayo) return;
+        this.isInCayo = false;
+        mp.game.invoke(cayoPericoNative.SET_TOGGLE_MINIMAP_HEIST_ISLAND, false);
+
+        mp.gui.chat.push("Cayo Perico unloaded.");
     }
 }
 

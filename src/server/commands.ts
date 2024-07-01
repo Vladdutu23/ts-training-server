@@ -49,6 +49,9 @@ class Commands {
         SETTIME: 'settime',
         SETWEATHER: 'setweather',
         DESPAWN_VEHICLE: 'dv',
+        CARCOLOR: 'carcolor',
+        SETVW: 'setvw',
+        DEBUG_LABELS: 'dl',
     }
 
     findPlayer(usernameOrId: string): PlayerMp | null {
@@ -155,6 +158,16 @@ class Commands {
         mp.players.broadcast(`(/dv) ${player.name} Despawned a Vehicle.`);
     }
 
+    setCarColor(player: PlayerMp, color1: number, color2: number): void {
+        const vehicle = player.vehicle;
+        if (!vehicle) {
+            player.outputChatBox(`You are not in a vehicle!`);
+            return;
+        }
+        vehicle.setColor(color1, color2);
+        mp.players.broadcast(`(/carcolor) ${player.name} Sets Car Color to ${color1} ${color2}.`);
+    }
+
     setTime(player: PlayerMp, time: number): void {
         mp.world.time.hour = time;
         mp.players.broadcast(`(/settime) ${player.name} Sets Time to ${time}.`);
@@ -170,6 +183,11 @@ class Commands {
         mp.players.broadcast(`(/setweather) ${player.name} Sets Weather to ${weather}.`);
     }
 
+    setVirtualWorld(player: PlayerMp, vw: number): void {
+        player.dimension = vw;
+        mp.players.broadcast(`(/setvw) ${player.name} Sets Virtual World to ${vw}.`);
+    }
+
     events = [
         // Help
         mp.events.addCommand(this.commandsList.HELP, (player, _fullText) => {
@@ -177,8 +195,9 @@ class Commands {
             player.outputChatBox(`Health & Armor Commands: /sethp, /setarmor, /mf, /revive`);
             player.outputChatBox(`Weather Commands: /settime, /setweather`);
             player.outputChatBox(`Weapon Commands: /gg`);
-            player.outputChatBox(`Vehicle Commands: /veh, /dv`);
+            player.outputChatBox(`Vehicle Commands: /veh, /dv, /setcolor`);
             player.outputChatBox(`Clothes Commands: /male, /female, /top, /undershirt, /torso, /legs, /shoes, /bag, /mask, /hairstyle`);
+            player.outputChatBox(`World Commands: /setvw`);
         }),
 
         // Teleport
@@ -290,6 +309,18 @@ class Commands {
             }
             this.despawnVehicle(player, parseInt(vehicleId));
         }),
+        
+        mp.events.addCommand(this.commandsList.CARCOLOR, (player, _fullText, color1, color2) => {
+            if (!color1 || !color2) {
+                player.outputChatBox(`Usage: [/carcolor <Color 1> <Color 2>]`);
+                return;
+            }
+            this.setCarColor(player, parseInt(color1), parseInt(color2));
+        }),
+        
+        mp.events.addCommand(this.commandsList.DEBUG_LABELS, (player, _fullText) => {
+            player.call('debuglabel::change-state');
+        }),
 
         // Clothes
         mp.events.addCommand(this.commandsList.MALE, (player, _fullText) => {
@@ -383,6 +414,15 @@ class Commands {
                 return;
             }
             this.setWeather(player, parseInt(weather));
+        }),
+
+        // World
+        mp.events.addCommand(this.commandsList.SETVW, (player, _fullText, vw) => {
+            if (!vw) {
+                player.outputChatBox(`Usage: [/setvw <Virtual Id>]`);
+                return;
+            }
+            this.setVirtualWorld(player, parseInt(vw));
         }),
 
         mp.events.add("playerCommand", (player, command) => {

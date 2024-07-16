@@ -45,22 +45,10 @@ class TeleportUtils {
                                 // if found groundZ
                                 coord.z += 1;
                                 player.position = coord;
-                                mp.system.notify({
-                                    title: 'Teleporter',
-                                    text: `TeleportSuccess!`,
-                                    attribute: 'B-Zone V',
-                                    duration: 5,
-                                    silent: true
-                                });
+                                mp.gui.chat.push(`TeleportSuccess!`);
                             } else {
                                 player.position = oldpos;
-                                mp.system.notify({
-                                    title: 'Teleporter',
-                                    text: `TeleportError!`,
-                                    attribute: 'B-Zone V',
-                                    duration: 5,
-                                    silent: true
-                                });
+                                mp.gui.chat.push(`TeleportError!`);
                             }
                             player.freezePosition(false);
                             mp.game.cam.doScreenFadeIn(250);
@@ -70,13 +58,7 @@ class TeleportUtils {
                 }
             }
         } else {
-            mp.system.notify({
-                title: 'Teleporter',
-                text: `WaypointNotSet!`,
-                attribute: 'B-Zone V',
-                duration: 5,
-                silent: true
-            });
+            mp.gui.chat.push(`WaypointNotSet!`);
         }
     }
 

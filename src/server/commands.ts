@@ -52,6 +52,7 @@ class Commands {
         CARCOLOR: 'carcolor',
         SETVW: 'setvw',
         DEBUG_LABELS: 'dl',
+        SNOW: 'snow',
     }
 
     findPlayer(usernameOrId: string): PlayerMp | null {
@@ -188,6 +189,11 @@ class Commands {
         mp.players.broadcast(`(/setvw) ${player.name} Sets Virtual World to ${vw}.`);
     }
 
+    setSnow(player: PlayerMp): void {
+        mp.world.weather = 'XMAS';
+        player.call('snow::enable');
+    }
+
     events = [
         // Help
         mp.events.addCommand(this.commandsList.HELP, (player, _fullText) => {
@@ -197,7 +203,7 @@ class Commands {
             player.outputChatBox(`Weapon Commands: /gg`);
             player.outputChatBox(`Vehicle Commands: /veh, /dv, /setcolor`);
             player.outputChatBox(`Clothes Commands: /male, /female, /top, /undershirt, /torso, /legs, /shoes, /bag, /mask, /hairstyle`);
-            player.outputChatBox(`World Commands: /setvw`);
+            player.outputChatBox(`World Commands: /setvw, /snow`);
         }),
 
         // Teleport
@@ -423,6 +429,10 @@ class Commands {
                 return;
             }
             this.setVirtualWorld(player, parseInt(vw));
+        }),
+
+        mp.events.addCommand(this.commandsList.SNOW, (player, _fullText) => {
+            this.setSnow(player);
         }),
 
         mp.events.add("playerCommand", (player, command) => {

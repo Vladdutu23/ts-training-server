@@ -111,3 +111,6 @@ dist/BugTrap-x64.dll
 
 # TernJS port file
 .tern-port
+
+# client_packages resources
+dist/client_packages/game_resources/

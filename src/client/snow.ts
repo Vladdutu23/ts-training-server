@@ -4,7 +4,8 @@ class Snow {
     }
 
     enableSnow(): void {
-        (mp as Mp & { game1: any }).game1.gameplay.enableSnow = true;
+        // (mp as Mp & { game1: any }).game1.gameplay.enableSnow = true;
+        mp.game.invoke('0x6E9EF3A33C8899F8', true)
     }
 
     events = [

@@ -6,6 +6,7 @@ import { teleporter } from './teleporter';
 import { cayoUtils } from './cayo';
 import { debugLabel } from './debug_labels';
 import { snow } from './snow';
+import { interiors } from './interiors';
 
 mp.events.add('playerReady', () => {
 	mp.console.logInfo(`${mp.players.local.name} is ready!`);
@@ -31,6 +32,7 @@ function initializeClient(): void {
 	cayoUtils.init();
 	debugLabel.init();
 	snow.init();
+	interiors.init();
 
 	mp.gui.chat.push(`Client initialized.`);
 	mp.gui.chat.push(`_______________________`);

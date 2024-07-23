@@ -53,6 +53,7 @@ class Commands {
         SETVW: 'setvw',
         DEBUG_LABELS: 'dl',
         SNOW: 'snow',
+        REMOVE_SNOW: 'removesnow',
     }
 
     findPlayer(usernameOrId: string): PlayerMp | null {
@@ -194,6 +195,11 @@ class Commands {
         player.call('snow::enable');
     }
 
+    removeSnow(player: PlayerMp): void {
+        mp.world.weather = 'EXTRASUNNY';
+        player.call('snow::disable');
+    }
+
     events = [
         // Help
         mp.events.addCommand(this.commandsList.HELP, (player, _fullText) => {
@@ -203,7 +209,7 @@ class Commands {
             player.outputChatBox(`Weapon Commands: /gg`);
             player.outputChatBox(`Vehicle Commands: /veh, /dv, /setcolor`);
             player.outputChatBox(`Clothes Commands: /male, /female, /top, /undershirt, /torso, /legs, /shoes, /bag, /mask, /hairstyle`);
-            player.outputChatBox(`World Commands: /setvw, /snow`);
+            player.outputChatBox(`World Commands: /setvw, /snow, /removesnow`);
         }),
 
         // Teleport
@@ -433,6 +439,10 @@ class Commands {
 
         mp.events.addCommand(this.commandsList.SNOW, (player, _fullText) => {
             this.setSnow(player);
+        }),
+
+        mp.events.addCommand(this.commandsList.REMOVE_SNOW, (player, _fullText) => {
+            this.removeSnow(player);
         }),
 
         mp.events.add("playerCommand", (player, command) => {

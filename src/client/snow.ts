@@ -3,15 +3,15 @@ class Snow {
         return;
     }
 
-    enableSnow(): void {
-        // (mp as Mp & { game1: any }).game1.gameplay.enableSnow = true;
-        mp.game.invoke('0x6E9EF3A33C8899F8', true)
-    }
-
     events = [
+        mp.events.add('snow::toggle', (toggle) => {
+            mp.console.logWarning(`snow::toggle ${toggle}`);
+            mp.game.invoke('0x6E9EF3A33C8899F8', toggle)
+        }),,
+
         mp.events.add('snow::enable', () => {
             mp.console.logWarning('snow::enable');
-            this.enableSnow();
+            mp.game.invoke('0x6E9EF3A33C8899F8', true)
         }),,
 
         mp.events.add('snow::disable', () => {

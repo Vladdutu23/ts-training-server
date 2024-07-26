@@ -192,12 +192,12 @@ class Commands {
 
     setSnow(player: PlayerMp): void {
         mp.world.weather = 'XMAS';
-        player.call('snow::enable');
+        player.call('snow::toggle', [true]);
     }
 
     removeSnow(player: PlayerMp): void {
         mp.world.weather = 'EXTRASUNNY';
-        player.call('snow::disable');
+        player.call('snow::toggle', [false]);
     }
 
     events = [

@@ -1,6 +1,8 @@
 class GlobalRender {
     init(): void {
-        this.disableAmbientSounds();
+        setInterval(() => {
+            this.disableAmbientSounds();
+        }, 120000);
         mp.gui.chat.push("Global Render initialized.");
         return;
     }

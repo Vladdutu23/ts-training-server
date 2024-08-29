@@ -23,7 +23,7 @@ const pkgJson = jetpack.read('package.json', 'json');
 const localInstalledPackages = [...Object.keys(pkgJson.dependencies)];
 
 /**
- * Resolve given path by fs-jetpack
+ * 
  */
 function resolvePath(pathParts) {
 	return jetpack.path(...pathParts);
